@@ -20,10 +20,25 @@ def matchingType(elements, keyword)
   noNilElements.each do |currentElement|
 
     match = result.find {|previousElement| currentElement[keyword] == previousElement[keyword]}
+    emailMatch = result.find {|previousElement| currentElement["Email"] == previousElement["Email"]}
+    phoneMatch = result.find {|previousElement| currentElement["Phone"] == previousElement["Phone"]}
 
-    if match
-      currentElement["ID"] = match["ID"]
+    case keyword
+    when "Both"
+      if emailMatch
+        currentElement["ID"] = match["ID"]
+      elsif phoneMatch
+        currentElement["ID"] = match["ID"]
+      else
+        currentElement["ID"] = id
+        id += 1
+      end
+
     else
+
+      if match
+        currentElement["ID"] = match["ID"]
+      else
       currentElement["ID"] = id
       id += 1
     end
@@ -37,6 +52,7 @@ def matchingType(elements, keyword)
   end
 
   result << nilElements
+end
 end
 
 class Array
@@ -59,6 +75,4 @@ begin
   searchedArray.to_csv()
 rescue TypeError
   puts "Done!"
-rescue
-  puts "Error!"
 end
